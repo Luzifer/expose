@@ -1,0 +1,14 @@
+[Unit]
+Description=ngrok port forwarding
+After=network-online.target
+
+[Service]
+TimeoutStartSec=0
+TimeoutStopSec=0
+Restart=on-failure
+RestartSec=5
+ExecStart=/usr/local/bin/ngrok start --none
+
+[Install]
+WantedBy=multi-user.target
+

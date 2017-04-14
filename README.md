@@ -11,18 +11,18 @@
     ```
 - Close that port again
     ```bash
-    # go run *.go delete 4000
+    # expose delete 4000
     Successfully closed tunnel "expose_4000" to address "localhost:4000".
     ```
 - Quickly share a folder with files through HTTP
     ```bash
-    # go run *.go serve
+    # expose serve
     Created HTTP server for this directory with URL https://81e668af.eu.ngrok.io
     Press Ctrl+C to stop server and tunnel
     ```
 - List the active tunnels in a nice table
     ```bash
-    # go run *.go list
+    # expose list
          NAME     | TYPE  |    ADDRESS     |          PUBLIC URL
     +-------------+-------+----------------+------------------------------+
       expose_3000 | https | localhost:3000 | https://9c8d36d6.eu.ngrok.io

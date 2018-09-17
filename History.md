@@ -1,3 +1,9 @@
+# 0.3.1 / 2018-09-17
+
+  * Add buttons to README
+  * Fix license file
+  * Switch to dep for vendoring
+
 # 0.3.0 / 2018-09-17
 
   * Support gzip compression on server

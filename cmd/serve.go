@@ -8,6 +8,8 @@ import (
 	"os/signal"
 
 	"github.com/Luzifer/expose/ngrok2"
+	http_helper "github.com/Luzifer/go_helpers/http"
+
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +45,7 @@ var serveCmd = &cobra.Command{
 			return fmt.Errorf("Unable to create tunnel: %s", err)
 		}
 
-		go http.Serve(listener, http.FileServer(http.Dir(".")))
+		go http.Serve(listener, http_helper.GzipHandler(http.FileServer(http.Dir("."))))
 		fmt.Printf("Created HTTP server for this directory with URL %s\nPress Ctrl+C to stop server and tunnel", tun.PublicURL)
 
 		c := make(chan os.Signal, 1)

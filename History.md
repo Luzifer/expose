@@ -1,3 +1,7 @@
+# 0.3.0 / 2018-09-17
+
+  * Support gzip compression on server
+
 # 0.2.0 / 2017-08-05
 
   * Add basic implementation of WebDAV Folder expose

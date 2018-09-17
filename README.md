@@ -1,3 +1,8 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/Luzifer/expose)](https://goreportcard.com/report/github.com/Luzifer/expose)
+![](https://badges.fyi/github/license/Luzifer/expose)
+![](https://badges.fyi/github/downloads/Luzifer/expose)
+![](https://badges.fyi/github/latest-release/Luzifer/expose)
+
 # Luzifer / expose
 
 `expose` is a small CLI utility to control a running [ngrok 2](https://ngrok.com/) daemon.

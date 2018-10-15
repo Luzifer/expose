@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/Luzifer/expose/ngrok2"
 	http_helper "github.com/Luzifer/go_helpers/http"
@@ -50,6 +51,15 @@ var serveCmd = &cobra.Command{
 
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, os.Interrupt)
+
+		if d, err := cmd.Flags().GetDuration("timeout"); err == nil && d > 0 {
+			fmt.Printf(" (automatic close in %s)", d)
+			go func() {
+				<-time.After(d)
+				c <- os.Interrupt
+			}()
+		}
+
 		for range c {
 			if err := client.StopTunnel(tun.Name); err != nil {
 				return fmt.Errorf("Unable to stop tunnel %q: %s", tun.Name, err)
@@ -64,6 +74,8 @@ var serveCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(serveCmd)
+
+	serveCmd.Flags().DurationP("timeout", "t", 0, "Automatically close tunnel after timeout")
 
 	// Here you will define your flags and configuration settings.
 

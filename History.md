@@ -1,3 +1,9 @@
+# 0.5.0 / 2018-10-15
+
+  * Update dependencies
+  * Add auto-close for serve command
+  * Update reporunner image
+
 # 0.4.0 / 2018-10-15
 
   * Add json output for tunnels

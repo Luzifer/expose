@@ -1,3 +1,7 @@
+# 0.4.0 / 2018-10-15
+
+  * Add json output for tunnels
+
 # 0.3.1 / 2018-09-17
 
   * Add buttons to README

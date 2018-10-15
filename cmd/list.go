@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
 	"os"
 
 	"github.com/olekukonko/tablewriter"
@@ -18,8 +19,12 @@ var listCmd = &cobra.Command{
 			return err
 		}
 
+		if j, _ := cmd.Flags().GetBool("json"); j {
+			return json.NewEncoder(os.Stdout).Encode(tunnels)
+		}
+
 		if len(tunnels) == 0 {
-			fmt.Println("No tunnels are active right now.")
+			log.Println("No tunnels are active right now.")
 			return nil
 		}
 
@@ -44,6 +49,8 @@ var listCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(listCmd)
+
+	listCmd.Flags().Bool("json", false, "Give JSON output instead of table")
 
 	// Here you will define your flags and configuration settings.
 

@@ -1,3 +1,7 @@
+# 0.6.0 / 2019-07-31
+
+  * Add CORS and logging to serve command
+
 # 0.5.0 / 2018-10-15
 
   * Update dependencies

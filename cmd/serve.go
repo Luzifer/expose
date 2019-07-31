@@ -14,6 +14,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type corsWrap struct {
+	next   http.Handler
+	header string
+}
+
+func newCorsWrap(next http.Handler, header string) *corsWrap { return &corsWrap{next, header} }
+
+func (c corsWrap) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", c.header)
+	c.next.ServeHTTP(w, r)
+}
+
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
@@ -46,7 +58,19 @@ var serveCmd = &cobra.Command{
 			return fmt.Errorf("Unable to create tunnel: %s", err)
 		}
 
-		go http.Serve(listener, http_helper.GzipHandler(http.FileServer(http.Dir("."))))
+		var handler http.Handler
+		handler = http.FileServer(http.Dir("."))
+		handler = http_helper.GzipHandler(handler)
+
+		if c, err := cmd.Flags().GetString("cors"); err == nil && c != "" {
+			handler = newCorsWrap(handler, c)
+		}
+
+		if l, err := cmd.Flags().GetBool("http-logs"); err == nil && l {
+			handler = http_helper.NewHTTPLogHandler(handler)
+		}
+
+		go http.Serve(listener, handler)
 		fmt.Printf("Created HTTP server for this directory with URL %s\nPress Ctrl+C to stop server and tunnel", tun.PublicURL)
 
 		c := make(chan os.Signal, 1)
@@ -59,6 +83,8 @@ var serveCmd = &cobra.Command{
 				c <- os.Interrupt
 			}()
 		}
+
+		fmt.Println()
 
 		for range c {
 			if err := client.StopTunnel(tun.Name); err != nil {
@@ -76,6 +102,8 @@ func init() {
 	RootCmd.AddCommand(serveCmd)
 
 	serveCmd.Flags().DurationP("timeout", "t", 0, "Automatically close tunnel after timeout")
+	serveCmd.Flags().String("cors", "", "Enable setting CORS header")
+	serveCmd.Flags().Bool("http-logs", true, "Enable HTTP access logs")
 
 	// Here you will define your flags and configuration settings.
 
